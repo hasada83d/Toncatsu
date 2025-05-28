@@ -7,7 +7,10 @@ import textdistance
 
 class _Method_Base:
     def __init__(self):
-        self.start_time = time()
+        pass
+    
+    class _Config:
+        pass
     
     def set_data(self,data):
         """
@@ -20,61 +23,16 @@ class _Method_Base:
         """
         
         self.data = data
+        self.data.config=self._Config()
+        
+        self.data.config.start_time = time()
 
     def _calc_elapsedtime(self):
         """
         経過時間の計算
         """
-        t2 = time() - self.start_time
-        print('elapsed time of this method:', f"{t2}s")
-
-    def verify_matching(self):
-
-        # フルネット
-        #test_G = self.data.network.G
-        match_truth_array = set(self.data.trajectory.truth_array) & set(self.data.trajectory.mapmatched_array)
-        match_not_truth_array = set(self.data.trajectory.mapmatched_array) - set(self.data.trajectory.truth_array)
-        # print(match_truth_array)
-
-        # ARR = length of correctly matched route / total length of correct route
-        arr = 0.0
-        tlcr = 0.0
-        lcmr = 0.0
-
-        for link in self.data.trajectory.truth_array:
-            if self.data.get_length_by_id(link) != None:
-                tlcr = tlcr + self.data.get_length_by_id(link)
-            else:
-                print('None 1:' + str(link))
-        for link in match_truth_array:
-            if self.data.get_length_by_id(link) != None:
-                lcmr = lcmr + self.data.get_length_by_id(link)
-            else:
-                print('None 2:' + str(link))
-
-        arr = lcmr / tlcr
-        print(str(arr) + ' = ' + str(lcmr) + ' / ' + str(tlcr))
-
-        # IARR = length of incorrectly matched route / total length of matched route
-        iarr = 0.0
-        tlmr = 0.0
-        limr = 0.0
-
-        for link in self.data.trajectory.mapmatched_array:
-            if self.data.get_length_by_id(link) != None:
-                tlmr = tlmr + self.data.get_length_by_id(link)
-            else:
-                print('None 3:' + str(link))
-        for link in match_not_truth_array:
-            if self.data.get_length_by_id(link) != None:
-                limr = limr + self.data.get_length_by_id(link)
-            else:
-                print('None 4:' + str(link))
-
-        iarr = limr / tlmr
-        print(str(iarr) + ' = ' + str(limr) + ' / ' + str(tlmr))
-
-        return arr, iarr
+        t2 = time() - self.data.config.start_time
+        print('elapsed time of Toncatsu map-matching:', f"{t2}s")
 
 class Toncatsu(_Method_Base):
     """
@@ -104,10 +62,10 @@ class Toncatsu(_Method_Base):
             This effects when find the nearest edge on network. If True then interpolate points on edges. The interpolated points are found 
         """
         
-        self.interpolate_onlink=interpolate_onlink
-        self.nearest_neighborhood=nearest_neighborhood
+        self.data.config.interpolate_onlink=interpolate_onlink
+        self.data.config.nearest_neighborhood=nearest_neighborhood
 
-        if self.nearest_neighborhood in ["node"]:
+        if self.data.config.nearest_neighborhood in ["node"]:
             #(1)最近傍ノード(リンク)探索
             nearest_nodes_id = self._find_nearest_neighborhood()
             
@@ -115,7 +73,7 @@ class Toncatsu(_Method_Base):
             interpolated_path = self._interpolate_between_nodes(nearest_nodes_id)
             self.data.trajectory.nearest_node_array = np.array(nearest_nodes_id)#データ格納
             
-        elif self.nearest_neighborhood in ["edge","link"]:
+        elif self.data.config.nearest_neighborhood in ["edge","link"]:
             #(1)最近傍ノード(リンク)探索
             nearest_links_id,nearest_links_id_kyuchaku = self._find_nearest_neighborhood_link()
             self.data.trajectory.nearest_array = np.array(nearest_links_id_kyuchaku)#データ格納
@@ -136,18 +94,18 @@ class Toncatsu(_Method_Base):
         t = time()
         res_kdtree = sci_kdt.query(self.data.trajectory.observation_df[["x", "y"]], k=1)
         t2 = time() - t
-        print('elapsed time of kdtree:', f"{t2}s")
+        #rint('elapsed time of kdtree:', f"{t2}s")
         return res_kdtree
 
     def _find_nearest_neighborhood_link(self):
-        if self.interpolate_onlink:
+        if self.data.config.interpolate_onlink:
             self.data.make_link_geom()
             nearest_links_id,nearest_links_id_kyuchaku = self._find_nearest_neighborhood_interpolated()
         else:
             nearest_nodes_id = self._find_nearest_neighborhood()
             nearest_links_id = self.data.transform_nodes_to_links(nearest_nodes_id)
             nearest_links_id_kyuchaku = None
-        print("nearest links: " + str(nearest_links_id))
+        #print("nearest links: " + str(nearest_links_id))
 
         return nearest_links_id,nearest_links_id_kyuchaku
 
@@ -160,7 +118,7 @@ class Toncatsu(_Method_Base):
         return nearest_nodes_id
 
     def _find_nearest_neighborhood_interpolated(self,dist=10):
-        self._calc_elapsedtime()
+        #self._calc_elapsedtime()
         link_id_list=[]
         point_list=[]
         for i in self.data.network.link_gdf[self.data.network.link_gdf.index.isin(list(self.data.get_link_df_of_G().index))].index:
@@ -178,7 +136,7 @@ class Toncatsu(_Method_Base):
             for i in range(len(nearest_links_id_kyuchaku)-1):
                 if nearest_links_id_kyuchaku[i]!=nearest_links_id_kyuchaku[i+1]:
                     nearest_links_id.append(nearest_links_id_kyuchaku[i+1])
-        self._calc_elapsedtime()
+        #self._calc_elapsedtime()
 
         return nearest_links_id,nearest_links_id_kyuchaku
 
@@ -195,7 +153,7 @@ class Toncatsu(_Method_Base):
                 insert_index = interpolated_path.index(nearest_links_id[e2_i])
                 interpolated_path[insert_index: insert_index] = self.data.transform_nodes_to_links(
                     interpolation_nodebased)
-        print("interpolated path: " + str(interpolated_path))
+        #print("interpolated path: " + str(interpolated_path))
 
         return interpolated_path
 
@@ -210,7 +168,7 @@ class Toncatsu(_Method_Base):
                 length, interpolation_nodebased = nx.single_source_dijkstra(self.data.network.G, n1, n2,
                                                                             weight="weight")
                 interpolated_path.extend(self.data.transform_nodes_to_links(interpolation_nodebased)) # マルチリンクは全部追加
-        print("interpolated path: " + str(interpolated_path))
+        #print("interpolated path: " + str(interpolated_path))
 
         return interpolated_path
 
@@ -221,6 +179,6 @@ class Toncatsu(_Method_Base):
         length, mapmatched_nodebased = nx.single_source_dijkstra(sub_G, o, d, weight="weight")
         #print(mapmatched_nodebased)
         mapmatched_path = self.data.transform_nodes_to_links(mapmatched_nodebased)
-        print("mapmatched path: " + str(mapmatched_path))
+        #print("mapmatched path: " + str(mapmatched_path))
 
         return mapmatched_path
