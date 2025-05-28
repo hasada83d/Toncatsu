@@ -8,7 +8,7 @@ Created on Wed May 28 10:09:05 2025
 from .data_handler import Data
 from .matcher_core import Toncatsu
 
-def toncatsu(node_df, link_df, observation_df, output_dir):
+def toncatsu(node_df, link_df, observation_df, output_dir, split_length=10):
     """
     Perform map-matching using GMNS-format node/link data and GPS observations.
 
@@ -40,6 +40,10 @@ def toncatsu(node_df, link_df, observation_df, output_dir):
     output_dir : str or Path
         Path to the directory where output files will be saved.
 
+    split_length : float, optional
+        The length (in meters) to segment long links for preprocessing.
+        Default is 10.
+
     Returns
     -------
     data : Data
@@ -54,7 +58,7 @@ def toncatsu(node_df, link_df, observation_df, output_dir):
 
     matcher = Toncatsu()
     matcher.set_data(data)
-    matcher.fit(nearest_neighborhood="link", interpolate_onlink=True)
+    matcher.fit(nearest_neighborhood="link", interpolate_onlink=True,split_length=split_length)
     
     data.save_output(outout_dir=output_dir)
     

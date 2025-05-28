@@ -48,7 +48,7 @@ class Toncatsu(_Method_Base):
     
     """  
 
-    def fit(self,nearest_neighborhood="link",interpolate_onlink=True):
+    def fit(self,nearest_neighborhood="link",interpolate_onlink=True,split_length=10):
         """
         Toncatsuを実行
         (1)最近傍ノード(リンク)探索：self._find_nearest_neighborhood(), self._find_nearest_neighborhood_link()
@@ -74,7 +74,7 @@ class Toncatsu(_Method_Base):
             
         elif self.data.config.nearest_neighborhood in ["edge","link"]:
             #(1)最近傍ノード(リンク)探索
-            nearest_links_id,nearest_links_id_kyuchaku = self._find_nearest_neighborhood_link()
+            nearest_links_id,nearest_links_id_kyuchaku = self._find_nearest_neighborhood_link(split_length=split_length)
             self.data.trajectory.nearest_array = np.array(nearest_links_id_kyuchaku)#データ格納
             
             #(2)候補リンク抽出
@@ -96,10 +96,10 @@ class Toncatsu(_Method_Base):
         #rint('elapsed time of kdtree:', f"{t2}s")
         return res_kdtree
 
-    def _find_nearest_neighborhood_link(self):
+    def _find_nearest_neighborhood_link(self,split_length):
         if self.data.config.interpolate_onlink:
             self.data.make_link_geom()
-            nearest_links_id,nearest_links_id_kyuchaku = self._find_nearest_neighborhood_interpolated()
+            nearest_links_id,nearest_links_id_kyuchaku = self._find_nearest_neighborhood_interpolated(dist=split_length)
         else:
             nearest_nodes_id = self._find_nearest_neighborhood()
             nearest_links_id = self.data.transform_nodes_to_links(nearest_nodes_id)
