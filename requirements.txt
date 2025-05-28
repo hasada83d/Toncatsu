@@ -1,0 +1,7 @@
+pandas>=1.5
+numpy>=1.22
+geopandas>=0.12
+shapely>=2.0
+networkx>=2.8
+scipy>=1.9
+textdistance>=4.5
