@@ -1,4 +1,8 @@
-# Toncatsu: A Python Library for Robust Observation-based Map-matching
+# Toncatsu
+[![PyPI version](https://badge.fury.io/py/toncatsu.svg)](https://pypi.org/project/toncatsu/)
+
+A Python Library for Robust Observation-based Map-matching
+
 頑健な観測ベースのマップマッチングを行うpythonライブラリ
 
 ## Overview 概要
