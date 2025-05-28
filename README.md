@@ -43,7 +43,7 @@ pip install toncatsu
 from toncatsu import toncatsu
 
 # Required DataFrames: node_df, link_df, observation_df
-toncatsu(node_df, link_df, observation_df, output_dir="./output")
+toncatsu(node_df, link_df, observation_df, output_dir="./output", split_length=10)
 ```
 
 ## Function: `toncatsu()` 関数の説明
