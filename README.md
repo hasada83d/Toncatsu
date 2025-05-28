@@ -1,11 +1,11 @@
-# Toncatsu: A Robust and Lightweight Map-Matching Library
-頑健かつ軽量なマップマッチングライブラリ
+# Toncatsu: A Python Library for Robust Observation-based Map-matching
+頑健な観測ベースのマップマッチングを行うpythonライブラリ
 
 ## Overview 概要
 
-**Toncatsu** is a Python package that extends the path-based map-matching logic originally developed in the GPS trajectory analysis tool *Catsudon* (Hara, 2017). This method improves robustness against GNSS errors by associating GPS observations with the nearest **links**, rather than the nearest **nodes**, enabling more stable and accurate estimation of movement paths across varying network granularities.
+**Toncatsu** is a Python library that extends the path-based map-matching logic originally developed in the GPS trajectory analysis tool *Catsudon* (Hara, 2017). This method improves robustness against GNSS errors by associating GPS observations with the nearest **links**, rather than the nearest **nodes**, enabling more stable and accurate estimation of movement paths across varying network granularities.
 
-Toncatsuは、原（2017）が提案した移動軌跡解析ツールCatsudonのマップマッチング手法を発展させたPythonパッケージです。観測点を最も近いノードではなく最も近いリンクに対応づけることで、ネットワーク構造に依存しない、頑健なマップマッチングが可能になります。GNSS誤差への耐性を持ち、リンクの分割状況に左右されずに、より現実に近い経路推定が行えます。
+Toncatsuは、原（2017）が提案した移動軌跡解析ツールCatsudonのマップマッチング手法を発展させたPythonライブラリです。観測点を最も近いノードではなく最も近いリンクに対応づけることで、ネットワーク構造に依存しない、頑健なマップマッチングが可能になります。GNSS誤差への耐性を持ち、リンクの分割状況に左右されずに、より現実に近い経路推定が行えます。
 
 ## Features 特徴
 
@@ -18,9 +18,11 @@ Toncatsuは、原（2017）が提案した移動軌跡解析ツールCatsudonの
 - 🧪 **Benchmark tested**: Evaluated using standardized test datasets  
   　**ベンチマーク検証済み**：標準データセットを用いた評価を実施
 
+## Citation 引用
+Coming soon!
 
-## License ライセンス
-MIT License
+## References 参考文献
+- 原祐輔. 2017. “GPS軌跡解析器の開発と長期観測データを用いた新たな個人属性の提案.” In 第 55 回土木計画学研究発表会・講演集.
 
 ---
 
@@ -53,9 +55,11 @@ English
 - `link_df`: GeoDataFrame with columns: `'link_id'`, `'from_node_id'`, `'to_node_id'`, `'geometry'`  
 - `observation_df`: DataFrame with columns: `'id'`, `'x_coord'`, `'y_coord'`  
 - `output_dir`: Output directory for saving results
+- `split_length`: Segment length for link splitting in meters (default: 10)
 
 日本語
 - `node_df`: `'node_id'`, `'x_coord'`, `'y_coord'` を含むDataFrame  
 - `link_df`: `'link_id'`, `'from_node_id'`, `'to_node_id'`, `'geometry'` を含むGeoDataFrame  
 - `observation_df`: `'id'`, `'x_coord'`, `'y_coord'` を含むDataFrame  
 - `output_dir`: 結果を保存する出力先ディレクトリ
+- `split_length`: リンク分割の長さ(m) (デフォルト: 10)
