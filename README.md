@@ -32,7 +32,6 @@ Coming soon!
 pip install toncatsu
 ```
 
-(Coming soon to PyPI / PyPI公開予定)
 
 ## Usage 使い方
 
