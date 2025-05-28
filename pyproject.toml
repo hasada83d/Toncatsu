@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "toncatsu"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Robust and Lightweight Map-Matching Library"
 authors = [
   {name = "Hiroyuki Hasada", email = "important83d@gmail.com"}
