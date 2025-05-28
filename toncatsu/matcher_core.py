@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import scipy.spatial as ss
 from time import time
-import textdistance
 
 class _Method_Base:
     def __init__(self):
