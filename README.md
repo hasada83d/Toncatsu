@@ -43,27 +43,17 @@ toncatsu(node_df, link_df, observation_df, output_dir="./output")
 
 ## Function: `toncatsu()` 関数の説明
 
-### English
-
-```python
-def toncatsu(node_df, link_df, observation_df, output_dir):
-```
-
 Performs map-matching using GMNS-format node/link data and GPS observations.
+GMNS形式のノード・リンク・GPS観測データを用いてマップマッチングを実行します。
 
-**Parameters:**
-
+**Parameters 引数:**
+### English
 - `node_df`: DataFrame with columns: `'node_id'`, `'x_coord'`, `'y_coord'`  
 - `link_df`: GeoDataFrame with columns: `'link_id'`, `'from_node_id'`, `'to_node_id'`, `'geometry'`  
 - `observation_df`: DataFrame with columns: `'id'`, `'x_coord'`, `'y_coord'`  
 - `output_dir`: Output directory for saving results
 
 ### 日本語
-
-GMNS形式のノード・リンク・GPS観測データを用いてマップマッチングを実行します。
-
-**引数:**
-
 - `node_df`: `'node_id'`, `'x_coord'`, `'y_coord'` を含むDataFrame  
 - `link_df`: `'link_id'`, `'from_node_id'`, `'to_node_id'`, `'geometry'` を含むGeoDataFrame  
 - `observation_df`: `'id'`, `'x_coord'`, `'y_coord'` を含むDataFrame  
