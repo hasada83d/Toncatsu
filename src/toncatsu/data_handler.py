@@ -342,10 +342,10 @@ class Data(_Trajectory, _Network):
         self._setup_graph(G)
  
 
-    def save_output(self,outout_dir):
+    def save_output(self,outout_dir,output_name=""):
         self.make_output()
-        self.network.link_df_keiro.to_csv(os.path.join(outout_dir, 'keiro.csv'),index=False,encoding="cp932")
-        self.trajectory.observation_df_kyuchaku.to_csv(os.path.join(outout_dir, 'kyuchaku.csv'),index=False,encoding="cp932")
+        self.network.link_df_keiro.to_csv(os.path.join(outout_dir, f'{output_name}keiro.csv'),index=False,encoding="cp932")
+        self.trajectory.observation_df_kyuchaku.to_csv(os.path.join(outout_dir, f'{output_name}kyuchaku.csv'),index=False,encoding="cp932")
     
     def make_output(self):
         self._make_kyuchaku()
@@ -446,7 +446,7 @@ class Data(_Trajectory, _Network):
                 print('None 2:' + str(link))
 
         arr = lcmr / tlcr
-        print(str(arr) + ' = ' + str(lcmr) + ' / ' + str(tlcr))
+        #print(str(arr) + ' = ' + str(lcmr) + ' / ' + str(tlcr))
 
         # IARR = length of incorrectly matched route / total length of matched route
         iarr = 0.0
@@ -465,6 +465,6 @@ class Data(_Trajectory, _Network):
                 print('None 4:' + str(link))
 
         iarr = limr / tlmr
-        print(str(iarr) + ' = ' + str(limr) + ' / ' + str(tlmr))
+        #print(str(iarr) + ' = ' + str(limr) + ' / ' + str(tlmr))
 
         return arr, iarr
