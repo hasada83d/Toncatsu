@@ -62,14 +62,14 @@ Function `toncatsu()` performs map-matching using [GMNS format](https://github.c
 
 English
 - `link_df`: DataFrame with columns: `'link_id'`, `'from_node_id'`, `'to_node_id'` (follows GMNS format)
-- `node_df`: DataFrame with columns: `'node_id'`, `'x_coord'`, `'y_coord'` (follows GMNS format)
+- `node_df`: DataFrame with columns: `'node_id'`, `'x_coord'`, `'y_coord'` (follows GMNS format with EPSG:4326)
 - `observation_df`: DataFrame with columns: `'id'`, `'x_coord'`, `'y_coord'`  
 - `output_dir`: Output directory for saving results
 - `split_length`: Segment length for link splitting in meters (default: 10)
 
 日本語
 - `link_df`: `'link_id'`, `'from_node_id'`, `'to_node_id'` を含むDataFrame (GMNSフォーマットに準拠) 
-- `node_df`: `'node_id'`, `'x_coord'`, `'y_coord'` を含むDataFrame (GMNSフォーマットに準拠) 
+- `node_df`: `'node_id'`, `'x_coord'`, `'y_coord'` を含むDataFrame (GMNSフォーマットに準拠、EPSG:4326のみ対応) 
 - `observation_df`: `'id'`, `'x_coord'`, `'y_coord'` を含むDataFrame  
 - `output_dir`: 結果を保存する出力先ディレクトリ
 - `split_length`: リンク分割の長さ(m) (デフォルト: 10)
