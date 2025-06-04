@@ -28,9 +28,10 @@ Coming soon!
 ## Acknowledgment 謝辞
 This research was partially the result of the joint research with CSIS, the University of Tokyo (No. 1417) and used the following data: Real People Flow data provided by GeoTechnologies, Inc.
 
-本研究は、東京大学CSIS共同研究（No. 1417）による成果を含む（利用データ: 実人流データ（ジオテクノロジーズ株式会社提供））。
+本研究は、東京大学CSIS共同研究（No. 1417）による成果を含みます（利用データ: 実人流データ（ジオテクノロジーズ株式会社提供））。
 
 ## References 参考文献
+- Kubička, Matej, Arben Cela, Philippe Moulin, Hugues Mounier, and S. I. Niculescu. 2015. “Dataset for Testing and Training of Map-Matching Algorithms.” In 2015 IEEE Intelligent Vehicles Symposium (IV), 1088–93. IEEE.
 - 原祐輔. 2017. “GPS軌跡解析器の開発と長期観測データを用いた新たな個人属性の提案.” In 第 55 回土木計画学研究発表会・講演集.
 - 羽佐田紘之, 茂木渉, Yuhan Gao, and 岡英紀. 2024. “リンク分割を組み入れた頑健なマップマッチング手法の提案と比較.” In 第69回土木計画学研究発表会・講演集, C04-1.
 

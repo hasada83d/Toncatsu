@@ -314,7 +314,7 @@ class Data(_Trajectory, _Network):
     def reproject_crs(self, to_crs= "EPSG:xxxx", from_crs="EPSG:4326"):
         
         if to_crs == "EPSG:xxxx":
-            to_crs  = get_utm_epsg(self.trajectory.observation_df["x"].median(),self.trajectory.observation_df["y"].median())       
+            to_crs  = get_utm_epsg(self.trajectory.observation_df["y"].median(),self.trajectory.observation_df["x"].median())       
  
         self.trajectory.observation_df = self._func_reproject_crs(self.trajectory.observation_df, to_crs, from_crs)
         self.network.node_df = self._func_reproject_crs(self.network.node_df, to_crs, from_crs)
@@ -404,17 +404,9 @@ class Data(_Trajectory, _Network):
         ## 以下がボトルネックになっている
         for i in self.network.link_df_keiro.index:
             link_id = self.network.link_df_keiro["id"][i]
-            if len(self.trajectory.observation_df_kyuchaku[(self.trajectory.observation_df_kyuchaku["link_id"]==link_id)&(self.trajectory.observation_df_kyuchaku.index>=j)])>0:
-                ingoing = self.trajectory.observation_df_kyuchaku[(self.trajectory.observation_df_kyuchaku["link_id"]==link_id)&(self.trajectory.observation_df_kyuchaku.index>=j)].iloc[0,:]
-                for jj in range(j,len(self.trajectory.observation_df_kyuchaku)):
-                    if j < len(self.trajectory.observation_df_kyuchaku):
-                        if jj < len(self.trajectory.observation_df_kyuchaku)-1:
-                            if (self.trajectory.observation_df_kyuchaku["link_id"][jj] != None)&(self.trajectory.observation_df_kyuchaku["link_id"][jj] != self.trajectory.observation_df_kyuchaku["link_id"][jj+1]):
-                                j = jj+ 1
-                                break
-                    else:
-                        j == len(self.trajectory.observation_df_kyuchaku)
-                outgoing= self.trajectory.observation_df_kyuchaku[(self.trajectory.observation_df_kyuchaku.index==j-1)].iloc[0,:]
+            if len(self.trajectory.observation_df_kyuchaku[(self.trajectory.observation_df_kyuchaku["link_id"]==link_id)])>0:
+                ingoing = self.trajectory.observation_df_kyuchaku[(self.trajectory.observation_df_kyuchaku["link_id"]==link_id)].iloc[0,:]
+                outgoing= self.trajectory.observation_df_kyuchaku[(self.trajectory.observation_df_kyuchaku["link_id"]==link_id)].iloc[-1,:]
                 
                 #self.network.link_df_keiro["ingoing_time"][i] = ingoing["time"]
                 #self.network.link_df_keiro["outgoing_time"][i] = outgoing["time"]
