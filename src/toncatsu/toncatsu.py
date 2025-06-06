@@ -50,9 +50,11 @@ def toncatsu(link_df, node_df, observation_df, output_dir, split_length=10, **kw
         The Data object used for processing, containing all intermediate and final results.
     """
     
-    nearest_neighborhood = kwargs.get("nearest_neighborhood", "link")
+    nearest_neighborhood = kwargs.get("nearest_neighborhood", "both")
     interpolate_onlink = kwargs.get("interpolate_onlink", True)
     output_name= kwargs.get("output_name", "")
+    skip_range= kwargs.get("skip_range", 1)
+    skip_min= kwargs.get("skip_min", 1)
     
     data = Data()
     data.read_node(node_df)
@@ -63,7 +65,7 @@ def toncatsu(link_df, node_df, observation_df, output_dir, split_length=10, **kw
 
     matcher = Toncatsu()
     matcher.set_data(data)
-    matcher.fit(nearest_neighborhood=nearest_neighborhood, interpolate_onlink=interpolate_onlink,split_length=split_length)
+    matcher.fit(nearest_neighborhood=nearest_neighborhood, interpolate_onlink=interpolate_onlink,split_length=split_length,skip_range=skip_range,skip_min=skip_min)
     
     os.makedirs(output_dir, exist_ok=True)
     data.save_output(outout_dir=output_dir,output_name=output_name)

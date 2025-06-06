@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import scipy.spatial as ss
 from time import time
+import random
+import difflib
 
 class _Method_Base:
     def __init__(self):
@@ -48,7 +50,7 @@ class Toncatsu(_Method_Base):
     
     """  
 
-    def fit(self,nearest_neighborhood="link",interpolate_onlink=True,split_length=10):
+    def fit(self,nearest_neighborhood="link",interpolate_onlink=True,split_length=10,skip_range=1,skip_min=1):
         """
         Toncatsuを実行
         (1)最近傍ノード(リンク)探索：self._find_nearest_neighborhood(), self._find_nearest_neighborhood_link()
@@ -78,7 +80,23 @@ class Toncatsu(_Method_Base):
             self.data.trajectory.nearest_array = np.array(nearest_links_id_kyuchaku)#データ格納
             
             #(2)候補リンク抽出
-            interpolated_path = self._interpolate_between_edges(nearest_links_id)
+            interpolated_path = self._interpolate_between_edges(nearest_links_id,skip_range,skip_min)
+        elif self.data.config.nearest_neighborhood in ["both"]:
+            #(1)最近傍ノード(リンク)探索
+            nearest_nodes_id = self._find_nearest_neighborhood()
+            
+            #(2)候補リンク抽出
+            interpolated_path_nodebase = self._interpolate_between_nodes(nearest_nodes_id,skip_range,skip_min)
+            self.data.trajectory.nearest_node_array = np.array(nearest_nodes_id)#データ格納
+            
+            #(1)最近傍ノード(リンク)探索
+            nearest_links_id,nearest_links_id_kyuchaku = self._find_nearest_neighborhood_link(split_length=split_length)
+            self.data.trajectory.nearest_array = np.array(nearest_links_id_kyuchaku)#データ格納
+            
+            #(2)候補リンク抽出
+            interpolated_path_linkbase = self._interpolate_between_edges(nearest_links_id,skip_range,skip_min)
+            interpolated_path = self._merge_preserving_order(interpolated_path_nodebase, interpolated_path_linkbase)
+            
         self.data.trajectory.interpolated_array = np.array(interpolated_path)#データ格納
         
         #(3)最短経路探索
@@ -139,10 +157,11 @@ class Toncatsu(_Method_Base):
 
         return nearest_links_id,nearest_links_id_kyuchaku
 
-    def _interpolate_between_edges(self, nearest_links_id):
+    def _interpolate_between_edges(self, nearest_links_id,skip_range=1,skip_min=1):
         interpolated_path = nearest_links_id.copy()
-        for e1_i in range(len(nearest_links_id) - 1):
-            e2_i = e1_i + 1
+        random.seed(0)
+        for e1_i in range(len(nearest_links_id) - skip_min):
+            e2_i = e1_i + random.choice(range(skip_min,min(skip_range+1,len(nearest_links_id) - e1_i)))
             e1_id, e2_id = nearest_links_id[e1_i], nearest_links_id[e2_i]
             e1_t = self.data.get_link_index_of_G(e1_id)[1]#[0][1]
             e2_s = self.data.get_link_index_of_G(e2_id)[0]#[0][0]
@@ -156,10 +175,11 @@ class Toncatsu(_Method_Base):
 
         return interpolated_path
 
-    def _interpolate_between_nodes(self, nearest_nodes_id):
+    def _interpolate_between_nodes(self, nearest_nodes_id,skip_range=1,skip_min=1):
         interpolated_path = []
-        for n1_i in range(len(nearest_nodes_id) - 1):
-            n2_i = n1_i + 1
+        random.seed(0)
+        for n1_i in range(len(nearest_nodes_id) - skip_min):
+            n2_i = n1_i + random.choice(range(skip_min,min(skip_range+1,len(nearest_nodes_id) - n1_i)))
             n1_id, n2_id = nearest_nodes_id[n1_i], nearest_nodes_id[n2_i]
             n1 = self.data.get_node_index_of_G(n1_id)
             n2 = self.data.get_node_index_of_G(n2_id)
@@ -181,3 +201,25 @@ class Toncatsu(_Method_Base):
         #print("mapmatched path: " + str(mapmatched_path))
 
         return mapmatched_path
+    
+    def _merge_preserving_order(self,base, other):
+        matcher = difflib.SequenceMatcher(None, base, other)
+        result = []
+        i = j = 0
+        for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+            if tag == 'equal':
+                result.extend(base[i1:i2])
+                i = i2
+                j = j2
+            elif tag == 'insert':
+                result.extend(other[j1:j2])
+                j = j2
+            elif tag == 'replace':
+                result.extend(base[i1:i2])
+                result.extend(other[j1:j2])
+                i = i2
+                j = j2
+            elif tag == 'delete':
+                result.extend(base[i1:i2])
+                i = i2
+        return result

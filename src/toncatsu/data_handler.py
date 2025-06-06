@@ -359,7 +359,7 @@ class Data(_Trajectory, _Network):
         # 吸着データを作成
         self.trajectory.observation_df_kyuchaku=self.trajectory.observation_df.copy()
         
-        if self.config.nearest_neighborhood=="node":
+        if self.config.nearest_neighborhood in ["node"]:
         
             ## マップマッチングされたリンクの端点を全て抽出
             mapmatched_nodes = list(set(self.network.link_df[self.network.link_df["id"].isin(self.trajectory.mapmatched_array)][["source","target"]].values.flatten()))
@@ -375,7 +375,7 @@ class Data(_Trajectory, _Network):
             self.trajectory.observation_df_kyuchaku.loc[self.trajectory.observation_df_kyuchaku.index.isin(nearest_mapmatched_nodes_index),col2]\
                 =nearest_link_df.loc[nearest_link_df.index.isin(nearest_mapmatched_nodes_index)].rename(columns={"id":"link_id"})
         
-        elif self.config.nearest_neighborhood=="link":
+        elif self.config.nearest_neighborhood in ["link","both"]:
             ## マップマッチングされたlink_dfを抽出
             nearest_link_df = pd.DataFrame(self.trajectory.nearest_array,columns=["id"])\
                 .merge(self.network.link_df,on="id",how="left").reset_index()[col1].replace([np.nan], [None])
