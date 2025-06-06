@@ -455,8 +455,11 @@ class Data(_Trajectory, _Network):
                 limr = limr + self.get_length_by_id(link)
             else:
                 print('None 4:' + str(link))
-
-        iarr = limr / tlmr
+        
+        if tlmr !=0:
+            iarr = limr / tlmr
+        else:
+            iarr = np.nan
         #print(str(iarr) + ' = ' + str(limr) + ' / ' + str(tlmr))
 
         return arr, iarr
