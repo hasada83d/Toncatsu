@@ -202,6 +202,15 @@ class _Network:
             G.edges[e]["weight"] = self._calc_linklength(n1["x"], n1["y"], n2["x"], n2["y"])
  
         return G
+    
+    def _set_linklength(self, G):
+ 
+
+        for e in G.edges:
+            i =G.edges[e]["id"]
+            G.edges[e]["weight"] = self.network.link_df.loc[self.network.link_df["id"]==i,"length"].values[0]
+ 
+        return G
 
     def _setup_graph(self, G):
  
@@ -214,8 +223,11 @@ class _Network:
 
         self.network.node_id_dict = nx.get_node_attributes(G, "id")
         self.network.node_id_dict_inv = {v: k for k, v in self.network.node_id_dict.items()}
-
-        G = self._set_linkweight(G)
+        
+        if "length" in self.network.link_df.columns:
+            G = self._set_linklength(G)
+        else:
+            G = self._set_linkweight(G)
         self.network.G = G
  
 
