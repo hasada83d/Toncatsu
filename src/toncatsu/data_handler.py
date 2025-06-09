@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import pandas as pd
 import numpy as np
@@ -304,16 +304,21 @@ class _Network:
  
 
         if not hasattr(self.network, 'link_gdf'):
-            _gdf=self.network.link_df.copy()
-            _gdf["geometry"]=None
-            self.network.link_gdf=gpd.GeoDataFrame(_gdf)
-            for i in self.network.link_gdf.index:
-                s, t = self.network.link_gdf["source"][i], self.network.link_gdf["target"][i]
-                s_x, s_y, *_ = self.network.node_df.loc[self.network.node_df["id"]==s,["x","y"]].values.tolist()[0]
-                t_x, t_y, *_ = self.network.node_df.loc[self.network.node_df["id"] == t, ["x", "y"]].values.tolist()[0]
-                self.network.link_gdf.loc[i,"geometry"] = LineString([(s_x, s_y), (t_x, t_y)])
-            self.network.link_gdf["length"]=self.network.link_gdf["geometry"].apply(lambda x:x.length)
- 
+            if "geometry" not in self.network.link_df.columns:
+                _gdf=self.network.link_df.copy()
+                _gdf["geometry"]=None
+                self.network.link_gdf=gpd.GeoDataFrame(_gdf)
+                for i in self.network.link_gdf.index:
+                    s, t = self.network.link_gdf["source"][i], self.network.link_gdf["target"][i]
+                    s_x, s_y, *_ = self.network.node_df.loc[self.network.node_df["id"]==s,["x","y"]].values.tolist()[0]
+                    t_x, t_y, *_ = self.network.node_df.loc[self.network.node_df["id"] == t, ["x", "y"]].values.tolist()[0]
+                    self.network.link_gdf.loc[i,"geometry"] = LineString([(s_x, s_y), (t_x, t_y)])
+                self.network.link_gdf["length"]=self.network.link_gdf["geometry"].apply(lambda x:x.length)
+            else:
+                self.network.link_gdf=gpd.GeoDataFrame(self.network.link_df,geometry="geometry").to_crs(self.network.to_crs)
+                if "length" not in self.network.link_gdf.columns:
+                    self.network.link_gdf["length"]=self.network.link_gdf["geometry"].apply(lambda x:x.length)
+
 
 class Data(_Trajectory, _Network):
     def __init__(self):
@@ -326,10 +331,10 @@ class Data(_Trajectory, _Network):
     def reproject_crs(self, to_crs= "EPSG:xxxx", from_crs="EPSG:4326"):
         
         if to_crs == "EPSG:xxxx":
-            to_crs  = get_utm_epsg(self.trajectory.observation_df["y"].median(),self.trajectory.observation_df["x"].median())       
+            self.network.to_crs  = get_utm_epsg(self.trajectory.observation_df["y"].median(),self.trajectory.observation_df["x"].median())       
  
-        self.trajectory.observation_df = self._func_reproject_crs(self.trajectory.observation_df, to_crs, from_crs)
-        self.network.node_df = self._func_reproject_crs(self.network.node_df, to_crs, from_crs)
+        self.trajectory.observation_df = self._func_reproject_crs(self.trajectory.observation_df, self.network.to_crs, from_crs)
+        self.network.node_df = self._func_reproject_crs(self.network.node_df, self.network.to_crs, from_crs)
  
 
     def _func_reproject_crs(self, df, to_crs, from_crs):
@@ -350,7 +355,7 @@ class Data(_Trajectory, _Network):
         self._setup_graph(G)
         self.network.G_total = self.network.G
         
-        G = G.subgraph(max(nx.strongly_connected_components(G), key=len))  # delete unconnected subgraph
+        G = G.subgraph(max(nx.weakly_connected_components(G), key=len))  # delete unconnected subgraph
         self._setup_graph(G)
  
 
