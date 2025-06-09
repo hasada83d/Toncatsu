@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: toncatsu
-Version: 0.1.4
+Version: 0.1.5
 Summary: A Python Library for Robust Observation-based Map-matching
 Author-email: Hiroyuki Hasada <important83d@gmail.com>
 License: MIT
