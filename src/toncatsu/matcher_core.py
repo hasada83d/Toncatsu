@@ -166,11 +166,15 @@ class Toncatsu(_Method_Base):
             e1_t = self.data.get_link_index_of_G(e1_id)[1]#[0][1]
             e2_s = self.data.get_link_index_of_G(e2_id)[0]#[0][0]
             if e1_t != e2_s:
-                length, interpolation_nodebased = nx.single_source_dijkstra(self.data.network.G, e1_t, e2_s,
-                                                                            weight="weight")
-                insert_index = interpolated_path.index(nearest_links_id[e2_i])
-                interpolated_path[insert_index: insert_index] = self.data.transform_nodes_to_links(
-                    interpolation_nodebased)
+                try:
+                    length, interpolation_nodebased = nx.single_source_dijkstra(self.data.network.G, e1_t, e2_s,
+                                                                                weight="weight")
+                    insert_index = interpolated_path.index(nearest_links_id[e2_i])
+                    interpolated_path[insert_index: insert_index] = self.data.transform_nodes_to_links(
+                        interpolation_nodebased)
+                except nx.NetworkXNoPath:
+                    # 経路が見つからない場合はスキップ
+                    continue
         #print("interpolated path: " + str(interpolated_path))
 
         return interpolated_path
