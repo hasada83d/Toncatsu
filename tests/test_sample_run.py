@@ -44,7 +44,7 @@ obs_df['y_coord'] = obs_df['y_coord'].astype(float)
 
 # map-matching
 os.makedirs(output_dir, exist_ok=True)
-data = toncatsu(link_df, node_df, obs_df, output_dir, split_length=10)
+data = toncatsu(link_df, node_df, obs_df, output_dir, split_length=10, findshortest_interval=5)
 
 # verify
 data.set_truth(os.path.join(dataset_dir, '00000000.route'))
