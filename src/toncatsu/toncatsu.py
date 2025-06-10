@@ -9,7 +9,7 @@ import os
 from .data_handler import Data
 from .matcher_core import Toncatsu
 
-def toncatsu(link_df, node_df, observation_df, output_dir, split_length=10, **kwargs):
+def toncatsu(link_df, node_df, observation_df, output_dir, split_length=10, findshortest_interval=5, **kwargs):
     """
     Perform map-matching using GMNS-format node/link data and GPS observations.
 
@@ -43,7 +43,10 @@ def toncatsu(link_df, node_df, observation_df, output_dir, split_length=10, **kw
     split_length : float, optional
         The length (in meters) to segment long links for preprocessing.
         Default is 10.
-
+    findshortest_interval : int, optional
+        Interval which is than 0 when searching for the shortest path between identified the nearest neighborhood links/nodes.
+        Default is 5.
+        
      **kwargs : dict, optional
         Additional keyword arguments to control the behavior of the map-matching process.
 
@@ -54,9 +57,9 @@ def toncatsu(link_df, node_df, observation_df, output_dir, split_length=10, **kw
 
         - output_name (str): Optional prefix for output file names. Default is "" (empty string).
 
-        - skip_range (int): Maximum number of links/nodes to look ahead when interpolate between identified the nearest neighborhood links/nodes. Default is 1.
+        - skip_range (int): Maximum number of links/nodes to look ahead when searching for the shortest path between identified the nearest neighborhood links/nodes. Default is 1.
 
-        - skip_min (int): Minimum number of links/nodes to look ahead when interpolate between identified the nearest neighborhood links/nodes. Default is 1.
+        - skip_min (int): Minimum number of links/nodes to look ahead when searching for the shortest path between identified the nearest neighborhood links/nodes. Default is 1.
 
     Returns
     -------
@@ -67,8 +70,8 @@ def toncatsu(link_df, node_df, observation_df, output_dir, split_length=10, **kw
     nearest_neighborhood = kwargs.get("nearest_neighborhood", "link")
     interpolate_onlink = kwargs.get("interpolate_onlink", True)
     output_name= kwargs.get("output_name", "")
-    skip_range= kwargs.get("skip_range", 1)
-    skip_min= kwargs.get("skip_min", 1)
+    skip_range= kwargs.get("skip_range", findshortest_interval)
+    skip_min= kwargs.get("skip_min", findshortest_interval)
     
     data = Data()
     data.read_node(node_df)
