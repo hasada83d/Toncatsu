@@ -67,7 +67,7 @@ English
 - `observation_df`: DataFrame with columns: `'id'`, `'x_coord'`, `'y_coord'`  
 - `output_dir`: Output directory for saving results
 - `split_length`: Segment length for link splitting in meters (default: 10)
-- `findshortest_interval`: Interval when searching for the shortest path between link sequences (default: 5)
+- `findshortest_interval`: Interval which is than 0 when searching for the shortest path between identified the nearest neighborhood links/nodes (default: 5)
 
 日本語
 - `link_df`: `'link_id'`, `'from_node_id'`, `'to_node_id'` を含むDataFrame (GMNSフォーマットに準拠) 
