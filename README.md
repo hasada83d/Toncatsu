@@ -50,7 +50,7 @@ pip install toncatsu
 from toncatsu import toncatsu
 
 # Required DataFrames: link_df, node_df, observation_df
-toncatsu(link_df, node_df, observation_df, output_dir="./output", split_length=10)
+toncatsu(link_df, node_df, observation_df, output_dir="./output", split_length=10,findshortest_interval=5)
 ```
 
 ## Function 関数
@@ -67,6 +67,7 @@ English
 - `observation_df`: DataFrame with columns: `'id'`, `'x_coord'`, `'y_coord'`  
 - `output_dir`: Output directory for saving results
 - `split_length`: Segment length for link splitting in meters (default: 10)
+- `findshortest_interval`: Interval when searching for the shortest path between link sequences (default: 5)
 
 日本語
 - `link_df`: `'link_id'`, `'from_node_id'`, `'to_node_id'` を含むDataFrame (GMNSフォーマットに準拠) 
@@ -74,3 +75,4 @@ English
 - `observation_df`: `'id'`, `'x_coord'`, `'y_coord'` を含むDataFrame  
 - `output_dir`: 結果を保存する出力先ディレクトリ
 - `split_length`: リンク分割の長さ(m) (デフォルト: 10)
+- `findshortest_interval`: リンク列間の最短経路を探索する際の間隔 (デフォルト: 5)
