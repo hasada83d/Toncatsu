@@ -50,7 +50,7 @@ pip install toncatsu
 from toncatsu import toncatsu
 
 # Required DataFrames: link_df, node_df, observation_df
-toncatsu(link_df, node_df, observation_df, output_dir="./output", split_length=10,findshortest_interval=5)
+toncatsu(link_df, node_df, observation_df, output_dir="./output", split_length=10, findshortest_interval=5)
 ```
 
 ## Function 関数
