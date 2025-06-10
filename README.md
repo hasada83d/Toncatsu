@@ -19,8 +19,8 @@ A Python Library for Robust Observation-based Map-matching
   　　**kd-treeを活用した高速探索**：空間木構造により近傍リンクを迅速に取得
 - 🐍 **Pure Python / GeoPandas-based**: Easy to install and integrate  
   　　**GeoPandasベースの純Python実装**：環境構築が容易で拡張性が高い
-- 🧪 **Benchmark tested**: Evaluated using standardized test datasets  
-  　**ベンチマーク検証済み**：標準データセットを用いた評価を実施
+- 🧪 **Benchmark tested**: Evaluated using standardized test datasets (Kubička et al., 2015)
+  　**ベンチマーク検証済み**：標準データセット(Kubička et al., 2015)を用いた評価を実施
 
 ## Citation 引用
 Coming soon!
