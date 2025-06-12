@@ -355,8 +355,8 @@ class Data(_Trajectory, _Network):
         self._setup_graph(G)
         self.network.G_total = self.network.G
         
-        G = G.subgraph(max(nx.weakly_connected_components(G), key=len))  # delete unconnected subgraph
-        self._setup_graph(G)
+        #G = G.subgraph(max(nx.weakly_connected_components(G), key=len))  # delete unconnected subgraph
+        #self._setup_graph(G)
  
 
     def save_output(self,outout_dir,output_name=""):
