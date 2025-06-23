@@ -7,14 +7,16 @@ A Python Library for Robust Observation-based Map-matching
 
 ## Overview 概要
 
-**Toncatsu** is a Python library that is robust to GPS/GNSS errors and performs stable map-matching regardless of link segmentation. It is based on the map-matching method proposed by Hara (2017) for Catsudon, a mobile trajectory analysis tool, and maps observation points to the nearest link rather than the nearest node.
+**Toncatsu** is a Python library that is robust to GPS/GNSS errors and performs stable map-matching regardless of link segmentation. I developed it based on the map-matching method proposed by Hara (2017) for Catsudon to meet the following characteristics.
 
-**Toncatsu**は、GPS/GNSS誤差への耐性を持ち、リンクの分割状況に左右されずに頑健なマップマッチングを行うPythonライブラリです。原（2017）が提案した移動軌跡解析ツールCatsudonのマップマッチング手法を発展させ、観測点を最も近いノードではなく最も近いリンクに対応づけます。
+**Toncatsu**は、GPS/GNSS誤差への耐性を持ち、リンクの分割状況に左右されずに頑健なマップマッチングを行うPythonライブラリです。以下の特徴を満たすように、原（2017）が提案した移動軌跡解析ツールCatsudonのマップマッチング手法を発展させています。
 
 ## Features 特徴
 
-- 🌍 **Link-based matching**: Reduces sensitivity to sparse or dense node distributions  
-  　　**リンク基準のマッチング**：ノードの疎密による経路のばらつきを低減
+- 🌍 **Link-based matching**: Search for nearest links instead of nearest nodes to be robust against node sparsity  
+  　　**リンク基準のマッチング**：最近傍ノードではなく最近傍リンクを探索してノード疎密に対して頑健に
+- 🔍 **Shortest path search between deviated links**: Find the shortest path by skipping to be more robust against outliers  
+  　　**数個飛ばしで最短経路探索**：数個飛ばしで最短経路探索して外れ値に対して頑健に
 - 🚀 **Fast search via kd-tree**: Efficient nearest-link search using spatial trees  
   　　**kd-treeを活用した高速探索**：空間木構造により近傍リンクを迅速に取得
 - 🐍 **Pure Python / GeoPandas-based**: Easy to install and integrate  
@@ -23,7 +25,8 @@ A Python Library for Robust Observation-based Map-matching
   　　**ベンチマーク検証済み**：標準データセット（Kubička et al., 2015）を用いた評価を実施
 
 ## Citation 引用
-Coming soon!
+- Hasada, H., Flexible Foundational Tools for Identifying Detailed Pedestrian and Vehicle Movements Based on Street Structure (preprint).  
+  羽佐田紘之, 街路構造に基づいて歩行者・車両の詳細な移動を推定する柔軟な基盤技術の開発 (preprint).
 
 ## Acknowledgment 謝辞
 This research was partially the result of the joint research with CSIS, the University of Tokyo (No. 1417) and used the following data: Real People Flow data provided by GeoTechnologies, Inc.
