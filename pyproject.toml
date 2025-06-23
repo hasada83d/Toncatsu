@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "toncatsu"
-version = "0.1.5"
+version = "1.0.0"
 description = "A Python Library for Robust Observation-based Map-matching"
 authors = [
   {name = "Hiroyuki Hasada", email = "important83d@gmail.com"}
